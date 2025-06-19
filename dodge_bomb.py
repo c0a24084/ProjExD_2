@@ -25,7 +25,7 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
         yoko = False
     if rct.top < 0 or HEIGHT < rct.bottom: # 縦方向の画面外判定
         tate = False
-    return yoko, tate  # 横方向，縦方向の画面内判定結果を返す
+    return yoko, tate  
 
 
 def g_o(screen: pg.Surface):
@@ -34,6 +34,7 @@ def g_o(screen: pg.Surface):
     引数:
         screen: Pygameの描画Surface
     """
+    #go gameover関数
     go_surface = pg.Surface((WIDTH, HEIGHT))
     go_surface.fill((0, 0, 0)) # 黒で塗りつぶし
     go_surface.set_alpha(150)
@@ -42,6 +43,7 @@ def g_o(screen: pg.Surface):
     text = font.render("Game Over", True, (255, 255, 255))
     text_rect = text.get_rect(center=(WIDTH / 2, HEIGHT / 2 + 100))
     screen.blit(text, text_rect)
+    #ckk crying koukaton
     ckk_img = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 0.9)
     ckk_rct_left = ckk_img.get_rect()
     ckk_rct_left.right = text_rect.left - 20
@@ -54,6 +56,7 @@ def g_o(screen: pg.Surface):
 
     pg.display.update()
     pg.time.wait(5000) # 5秒
+    
 def make_bomb() -> tuple[list, list]:
     sbb_accs = [a for a in range(1, 11)] #bombspeed
     ex_bb_imgs = [] 
@@ -61,9 +64,8 @@ def make_bomb() -> tuple[list, list]:
     for r in range(1, 11): # 10size
         bomb_size = 20 * r
         bb_img = pg.Surface((bomb_size, bomb_size))
-        # 円の中心はSurfaceの中心
         pg.draw.circle(bb_img, (255, 0, 0), (bomb_size // 2, bomb_size // 2), bomb_size // 2)
-        bb_img.set_colorkey((0, 0, 0)) # 黒を透明色に設定
+        bb_img.set_colorkey((0, 0, 0)) 
         ex_bb_imgs.append(bb_img)
     
     return sbb_accs, ex_bb_imgs
@@ -90,6 +92,7 @@ def main():
     
     clock = pg.time.Clock()
     tmr = 0
+
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -115,7 +118,7 @@ def main():
         screen.blit(kk_img, kk_rct)
         
         # tmrの値に応じて、爆弾の拡大率と加速度を選択
-        idx = min(tmr // 500, len(sbb_accs) - 1) 
+        idx = min(tmr // 500, len(sbb_accs) - 8) 
         
         current_bb_img = ex_bb_imgs[idx]
         acceleration_factor = sbb_accs[idx]
@@ -132,7 +135,7 @@ def main():
         
         pg.display.update()
         tmr += 1
-        clock.tick(150) # 50
+        clock.tick(50) # 50
 
 
 if __name__ == "__main__":
